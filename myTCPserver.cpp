@@ -3,7 +3,7 @@
 
 using namespace cv;
 
-MyTCPServer::MyTCPServer(int port)
+MyTCPServer::MyTCPServer(int port): recvFlag(true)
 {
     printf("Port No = %d\n", port);
     
@@ -42,7 +42,7 @@ MyTCPServer::MyTCPServer(int port)
     printf("Waiting for incoming connections...\n");
     
     return;
-
+    
 }
 
 void MyTCPServer::wait()
@@ -55,8 +55,35 @@ void MyTCPServer::wait()
     {
         printf("accept failed with error code : %d", WSAGetLastError());
     }
-    
+    recvFlag = true;
     printf("Connection accepted\n");
+}
+
+void MyTCPServer::waitFlag()
+{
+    recvFlag = false;
+    int size, read_size, stat, packet_index;    
+    char read_buffer[256];
+    
+    //Send Picture as Byte Array
+    if (DB_PRINT) { printf("Sending Picture as Byte Array\n"); }
+    
+    int flag;
+    do { //Read while we get errors that are due to signals.
+        stat = recv(new_socket, (char*)&flag, sizeof(int), 0);
+        if (DB_PRINT) { printf("Bytes read: %i\n", stat); }
+    } while (stat < 0);
+    
+    if(flag == 1)
+    {
+        recvFlag=true;
+    }
+    if (DB_PRINT) {
+        printf("Received data in socket\n");
+        //std::cout << "received: "<<read_buffer << std::endl;
+        printf("Socket data: %d\n", read_buffer);
+    }
+    
 }
 
 void MyTCPServer::encodeImg(Mat& input)
@@ -77,16 +104,25 @@ int MyTCPServer::init(int height, int width)
     
     return 0;
 }
+
 int MyTCPServer::sendImg(const mxArray* input)
 {
     imgBuff_ = cv::Mat(960, 1280, CV_8UC3, (uchar*)mxGetPr(input));
     encodeImg( imgBuff_ );
     size_t len = buff_.size();
-    return sendImg_(reinterpret_cast<char*>(buff_.data()), len);
+    if (recvFlag)
+    {
+        return sendImg_(reinterpret_cast<char*>(buff_.data()), len);
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 int MyTCPServer::sendImg_(char * ptr, size_t len)
 {
+    recvFlag = false;
     int size, read_size, stat, packet_index;
     const int batch = 10240;
     char read_buffer[256];

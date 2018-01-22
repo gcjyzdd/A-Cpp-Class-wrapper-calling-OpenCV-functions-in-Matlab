@@ -36,15 +36,15 @@ public:
     
     //int init(int port);
     
-    int sendImg(const mxArray* input);
-    
-    int sendImg_(char *ptr, size_t len);
+    int sendImg(const mxArray* input);        
     
     int init(int height, int width);
     
     void encodeImg(Mat& input);
     
     void wait();
+    
+    void waitFlag();
     
 private:
     WSADATA wsa;
@@ -53,6 +53,10 @@ private:
     Mat imgBuff_;
     std::vector<uchar> buff_;
     std::vector<int> param_;
+    
+    int sendImg_(char *ptr, size_t len);
+    
+    bool recvFlag;
 };
 
 
