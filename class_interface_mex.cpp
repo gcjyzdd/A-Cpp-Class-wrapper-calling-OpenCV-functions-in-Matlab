@@ -52,6 +52,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 		tcp_instance->wait();        
         return;
     }
+    // waitFlag    
+    if (!strcmp("waitFlag", cmd)) {
+        // Check parameters
+        if (nlhs < 0 || nrhs > 3)
+            mexErrMsgTxt("wait: Unexpected arguments.");
+         
+        // Call the method
+		tcp_instance->waitFlag();        
+        return;
+    }    
     // init    
     if (!strcmp("init", cmd)) {
         // Check parameters

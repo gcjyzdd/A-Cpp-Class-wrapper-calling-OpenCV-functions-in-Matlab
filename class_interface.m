@@ -23,6 +23,12 @@ classdef class_interface < handle
         function varargout = wait(this, varargin)
             [varargout{1:nargout}] = class_interface_mex('wait', this.objectHandle, varargin{:});
         end
+        
+        %% wait
+        function varargout = waitFlag(this, varargin)
+            [varargout{1:nargout}] = class_interface_mex('waitFlag', this.objectHandle, varargin{:});
+        end
+        
         %% Init
         function varargout = init(this, varargin)
             [varargout{1:nargout}] = class_interface_mex('init', this.objectHandle, varargin{:});
