@@ -27,6 +27,8 @@ mex('class_interface_mex.cpp', IPath, lib1);%_SECURE_SCL=1
 displayImage()
 
 %%
+clear a
+clc;
 
 tmp =imread('CAPTURE2.JPEG');
 tmp3 = permute(tmp(:,:,[3 2 1]), [3,2,1]);
@@ -34,13 +36,20 @@ tmp3 = permute(tmp(:,:,[3 2 1]), [3,2,1]);
 a = class_interface(3456);
 init(a, 960, 1280)
 wait(a)
-sendImg(a, tmp3)
+for i = 1:10
+    tic
+    sendImg(a, tmp3)
+    toc
+    waitFlag(a)
+end
+
+
 %%
 
 encodeImageOCV_Changjie(tmp3);
 
 
-for i =1:5    
+for i =1:5
     tic
     tmp3 = permute(tmp(:,:,[3 2 1]), [3,2,1]);
     toc

@@ -20,7 +20,7 @@
 
 #include "mex.h"
 
-#define DB_PRINT 1
+#define DB_PRINT 0
 
 using namespace cv;
 

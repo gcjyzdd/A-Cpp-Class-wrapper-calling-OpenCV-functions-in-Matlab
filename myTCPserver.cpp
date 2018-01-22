@@ -62,8 +62,7 @@ void MyTCPServer::wait()
 void MyTCPServer::waitFlag()
 {
     recvFlag = false;
-    int size, read_size, stat, packet_index;    
-    char read_buffer[256];
+    int size, read_size, stat, packet_index;        
     
     //Send Picture as Byte Array
     if (DB_PRINT) { printf("Sending Picture as Byte Array\n"); }
@@ -81,7 +80,7 @@ void MyTCPServer::waitFlag()
     if (DB_PRINT) {
         printf("Received data in socket\n");
         //std::cout << "received: "<<read_buffer << std::endl;
-        printf("Socket data: %d\n", read_buffer);
+        printf("Socket data: %d\n", flag);
     }
     
 }
